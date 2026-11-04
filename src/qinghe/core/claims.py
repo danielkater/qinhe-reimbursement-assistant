@@ -1,4 +1,5 @@
 """授权只读查单。本模块只有读方法，不提供审批、修改、支付。"""
+import re
 import time
 from dataclasses import dataclass
 from pathlib import Path
@@ -10,6 +11,15 @@ from qinghe.utils.audit import AuditLog
 EMPLOYEE, FINANCE = "employee", "finance"
 # 拒绝话术统一，避免通过不同提示探测别人的单号是否存在；真实原因只写入审计日志
 DENY_MESSAGE = "无权查询该单据，或单据不存在。本次请求已记录。"
+CLAIM_ID_FORMAT = re.compile(r"[A-Z]+-\d{4}-\d{4}")
+# 状态含义是演示用的草案，正式口径待财务核对。未列出的状态不做猜测
+STATUS_MEANINGS = {
+    "部门审批中": "部门负责人正在审批，不代表已批准或已付款。",
+    "财务审核中": "财务正在审核，不代表已批准或已付款。",
+    "待补件": "材料不全，等待员工补齐，不代表已批准或已付款。",
+    "已打款": "财务已完成打款。",
+}
+UNKNOWN_STATUS_MEANING = "该状态的含义待财务确认。"
 
 
 @dataclass(frozen=True)
@@ -17,18 +27,25 @@ class User:
     id: str
     name: str
     role: str
+    org: str
 
 
 @dataclass(frozen=True)
 class Claim:
     id: str
     owner_id: str
+    org: str
     title: str
     amount: float
     submitted: str
+    updated_at: str
     status: str
     missing: tuple[str, ...]
     note: str
+
+    @property
+    def status_meaning(self) -> str:
+        return STATUS_MEANINGS.get(self.status, UNKNOWN_STATUS_MEANING)
 
 
 @dataclass(frozen=True)
@@ -39,7 +56,9 @@ class AccessResult:
 
 
 def can_read(user: User, claim: Claim) -> bool:
-    """默认拒绝：只有明确列出的情况才放行。"""
+    """默认拒绝：先看组织，再按角色放行明确列出的情况。"""
+    if user.org != claim.org:
+        return False
     if user.role == FINANCE:
         return True
     return user.role == EMPLOYEE and claim.owner_id == user.id
@@ -55,9 +74,11 @@ class ClaimService:
                 c["id"]: Claim(
                     id=c["id"],
                     owner_id=c["owner_id"],
+                    org=c["org"],
                     title=c["title"],
                     amount=c["amount"],
                     submitted=str(c["submitted"]),
+                    updated_at=str(c["updated_at"]),
                     status=c["status"],
                     missing=tuple(c["missing"]),
                     note=c["note"],
@@ -89,16 +110,18 @@ class ClaimService:
             reason = "unknown_actor"
         elif claim is None:
             reason = "claim_not_found"
+        elif user.org != claim.org:
+            reason = "cross_org"
         elif not can_read(user, claim):
             reason = "forbidden"
         else:
             reason = "ok"
         allowed = reason == "ok"
+        # 输入框内容不可信，不符合单号格式或身份未知时不把原文写入日志
         self.audit.record(
             action="claim_lookup",
-            actor_id=actor_id,
-            actor_name=user.name if user else "",
-            claim_id=claim_id,
+            actor_id=user.id if user else "unknown",
+            claim_id=claim_id if CLAIM_ID_FORMAT.fullmatch(claim_id) else "invalid",
             result="allow" if allowed else "deny",
             reason=reason,
             elapsed_ms=round((time.perf_counter() - start) * 1000, 2),

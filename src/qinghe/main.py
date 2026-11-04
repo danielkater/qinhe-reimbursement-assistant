@@ -19,6 +19,7 @@ RESULT_LABELS = {"allow": "放行", "deny": "拒绝", "answered": "已回答", "
 REASON_LABELS = {
     "ok": "授权通过",
     "forbidden": "越权查询他人单据",
+    "cross_org": "跨组织查询",
     "claim_not_found": "单据不存在",
     "unknown_actor": "身份无法识别",
 }
@@ -63,8 +64,6 @@ def render_policy_tab(config, audit, qa, actor, use_llm) -> None:
         audit.record(
             action="policy_question",
             actor_id=actor.id,
-            actor_name=actor.name,
-            question=question[:200],
             result=answer.status,
             mode=answer.mode,
             citations=[c.id for c in answer.citations],
@@ -97,7 +96,9 @@ def render_claim_detail(service, claim) -> None:
     left.metric("状态", claim.status)
     middle.metric("金额（元）", f"{claim.amount:,.2f}")
     right.metric("提交日期", claim.submitted)
-    st.write(f"申请人：{service.owner_name(claim)}")
+    st.info(f"状态含义：{claim.status_meaning}")
+    st.write(f"申请人：{service.owner_name(claim)}　｜　状态更新时间：{claim.updated_at}")
+    st.caption("数据来源：虚构演示数据。状态的权威来源和正式含义待财务确认。")
     if claim.missing:
         st.warning(f"缺件：{'、'.join(claim.missing)}")
     if claim.note:
@@ -105,9 +106,9 @@ def render_claim_detail(service, claim) -> None:
 
 
 def render_claims_tab(service, actor) -> None:
-    st.caption("只读查询，不提供审批、修改和支付。")
+    st.caption("只读查询，不提供审批、修改和支付。状态只表示当前阶段，除“已打款”外都不代表已付款。")
     visible = service.list_visible(actor.id)
-    title = "全部单据" if actor.role == FINANCE else "我的单据"
+    title = "本组织单据" if actor.role == FINANCE else "我的单据"
     st.markdown(f"**{title}（{len(visible)} 笔）**")
     st.dataframe(
         [
@@ -117,6 +118,7 @@ def render_claims_tab(service, actor) -> None:
                 "事项": c.title,
                 "金额（元）": c.amount,
                 "状态": c.status,
+                "更新时间": c.updated_at,
                 "缺件": "、".join(c.missing) or "无",
             }
             for c in visible
@@ -142,7 +144,8 @@ def render_claims_tab(service, actor) -> None:
         st.error(result.message)
 
 
-def render_audit_tab(audit) -> None:
+def render_audit_tab(audit, service) -> None:
+    names = {u.id: u.name for u in service.users}
     summary = audit.summary()
     columns = st.columns(5)
     columns[0].metric("查单次数", summary["lookups"])
@@ -151,14 +154,17 @@ def render_audit_tab(audit) -> None:
     columns[2].metric("平均查单耗时", "<1 ms" if avg_ms < 1 else f"{avg_ms} ms")
     columns[3].metric("制度提问", summary["questions"])
     columns[4].metric("转人工", summary["handoffs"])
-    st.caption("以上为本机演示日志的统计，查单耗时只是系统响应时间，不代表线上效果。")
+    st.caption(
+        "以上为本机演示日志的统计，查单耗时只是系统响应时间，不代表线上效果。"
+        "日志只存身份编号、单号、结果和原因，不存姓名、提问原文和单据内容。"
+    )
 
     rows = [
         {
             "时间": e["time"],
-            "身份": e.get("actor_name") or e.get("actor_id"),
+            "身份": names.get(e.get("actor_id"), e.get("actor_id")),
             "操作": "查单" if e["action"] == "claim_lookup" else "制度提问",
-            "对象": e.get("claim_id") or e.get("question", ""),
+            "对象": e.get("claim_id", ""),
             "结果": RESULT_LABELS.get(e["result"], e["result"]),
             "说明": REASON_LABELS.get(e.get("reason"), "、".join(e.get("citations", []))),
         }
@@ -194,7 +200,7 @@ def main() -> None:
         render_claims_tab(service, actor)
     if actor.role == FINANCE:
         with tabs[2]:
-            render_audit_tab(audit)
+            render_audit_tab(audit, service)
 
 
 if __name__ == "__main__":

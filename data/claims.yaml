@@ -2,41 +2,62 @@
 claims:
   - id: BX-2026-0101
     owner_id: E1001
+    org: 青禾总部
     title: 上海出差差旅费
     amount: 3280.00
     submitted: 2026-10-12
+    updated_at: "2026-10-15 10:20"
     status: 待补件
     missing: [住宿水单, 打车行程单]
     note: 财务已退回，请在收到通知后 5 个工作日内补齐（见第10条）。
   - id: BX-2026-0102
     owner_id: E1001
+    org: 青禾总部
     title: 客户拜访招待费
     amount: 860.00
     submitted: 2026-10-20
-    status: 财务复核中
+    updated_at: "2026-10-22 16:30"
+    status: 财务审核中
     missing: []
     note: ""
   - id: BX-2026-0087
     owner_id: E1001
+    org: 青禾总部
     title: 北京培训交通费
     amount: 1150.00
     submitted: 2026-09-03
+    updated_at: "2026-09-18 11:05"
     status: 已打款
     missing: []
     note: ""
   - id: BX-2026-0103
     owner_id: E1002
+    org: 青禾总部
     title: 深圳出差差旅费
     amount: 4520.00
     submitted: 2026-10-18
+    updated_at: "2026-10-19 09:40"
     status: 部门审批中
     missing: []
     note: ""
   - id: BX-2026-0095
     owner_id: E1002
+    org: 青禾总部
     title: 杭州出差差旅费
     amount: 1760.00
     submitted: 2026-09-21
+    updated_at: "2026-09-25 14:10"
     status: 待补件
     missing: [出差申请单]
     note: 财务已退回，请在收到通知后 5 个工作日内补齐（见第10条）。
+  # 其他组织的单据：周敏虽是财务，也不能查看
+  - id: BX-2026-0201
+    owner_id: E3001
+    org: 青禾华南
+    title: 广州出差差旅费
+    amount: 2640.00
+    submitted: 2026-10-16
+    updated_at: "2026-10-20 15:00"
+    status: 财务审核中
+    missing: []
+    note: ""

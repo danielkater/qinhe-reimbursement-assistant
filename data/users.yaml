@@ -1,5 +1,5 @@
 # 模拟身份（虚构）。真实身份系统不在本次范围内。
 users:
-  - {id: E1001, name: 小林, role: employee}
-  - {id: E1002, name: 小王, role: employee}
-  - {id: F2001, name: 周敏, role: finance}
+  - {id: E1001, name: 小林, role: employee, org: 青禾总部}
+  - {id: E1002, name: 小王, role: employee, org: 青禾总部}
+  - {id: F2001, name: 周敏, role: finance, org: 青禾总部}

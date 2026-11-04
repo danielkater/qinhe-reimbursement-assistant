@@ -1,0 +1,11 @@
+# 虚构的财务内部资料（DOC-FIN）。状态有效但不公开，用来验证内部资料进不了员工检索和模型上下文。
+name: DOC-FIN 青禾公司部门差旅预算（内部）
+version: DOC-FIN-2026
+status: 有效
+visibility: 内部
+effective_date: 2026-01-01
+clauses:
+  - id: DOC-FIN-1
+    title: 部门差旅预算
+    text: 【内部】各部门年度差旅预算额度由财务单独核定，一线城市住宿预算按内部口径执行，不对员工公开。
+    keywords: [预算, 差旅预算, 内部预算, 住宿, 酒店, 上海]

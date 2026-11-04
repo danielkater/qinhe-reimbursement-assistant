@@ -2,6 +2,7 @@
 name: 青禾公司差旅与报销制度
 version: V2.1
 status: 已废止
+visibility: 公开
 effective_date: 2025-01-01
 clauses:
   - id: 第2条

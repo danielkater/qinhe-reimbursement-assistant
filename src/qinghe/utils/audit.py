@@ -3,12 +3,27 @@ import json
 from datetime import datetime
 from pathlib import Path
 
+# 字段白名单：只留追踪事件所需的内容，姓名、提问原文和单据内容写不进日志
+ALLOWED_FIELDS = {
+    "action",
+    "actor_id",
+    "claim_id",
+    "result",
+    "reason",
+    "elapsed_ms",
+    "mode",
+    "citations",
+}
+
 
 class AuditLog:
     def __init__(self, path: Path):
         self.path = Path(path)
 
     def record(self, **event) -> None:
+        unexpected = set(event) - ALLOWED_FIELDS
+        if unexpected:
+            raise ValueError(f"审计日志不允许记录这些字段：{sorted(unexpected)}")
         self.path.parent.mkdir(parents=True, exist_ok=True)
         event = {"time": datetime.now().isoformat(timespec="seconds"), **event}
         with open(self.path, "a", encoding="utf-8") as f:
