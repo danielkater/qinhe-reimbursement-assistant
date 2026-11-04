@@ -1,0 +1,16 @@
+# 密钥与本地配置
+.env
+.streamlit/secrets.toml
+
+# 依赖目录
+.venv/
+venv/
+node_modules/
+
+# Python 缓存
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# 运行时日志（审计日志含查询记录，不入库）
+logs/

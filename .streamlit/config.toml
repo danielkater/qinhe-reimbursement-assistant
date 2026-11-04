@@ -1,0 +1,10 @@
+[browser]
+gatherUsageStats = false
+
+[server]
+showEmailPrompt = false
+# 身份是模拟的，只允许本机访问
+address = "localhost"
+
+[client]
+toolbarMode = "minimal"

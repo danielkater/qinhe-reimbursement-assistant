@@ -1,0 +1,42 @@
+# 虚构报销单，仅用于演示。
+claims:
+  - id: BX-2026-0101
+    owner_id: E1001
+    title: 上海出差差旅费
+    amount: 3280.00
+    submitted: 2026-10-12
+    status: 待补件
+    missing: [住宿水单, 打车行程单]
+    note: 财务已退回，请在收到通知后 5 个工作日内补齐（见第10条）。
+  - id: BX-2026-0102
+    owner_id: E1001
+    title: 客户拜访招待费
+    amount: 860.00
+    submitted: 2026-10-20
+    status: 财务复核中
+    missing: []
+    note: ""
+  - id: BX-2026-0087
+    owner_id: E1001
+    title: 北京培训交通费
+    amount: 1150.00
+    submitted: 2026-09-03
+    status: 已打款
+    missing: []
+    note: ""
+  - id: BX-2026-0103
+    owner_id: E1002
+    title: 深圳出差差旅费
+    amount: 4520.00
+    submitted: 2026-10-18
+    status: 部门审批中
+    missing: []
+    note: ""
+  - id: BX-2026-0095
+    owner_id: E1002
+    title: 杭州出差差旅费
+    amount: 1760.00
+    submitted: 2026-09-21
+    status: 待补件
+    missing: [出差申请单]
+    note: 财务已退回，请在收到通知后 5 个工作日内补齐（见第10条）。

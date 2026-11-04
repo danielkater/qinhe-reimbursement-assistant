@@ -1,0 +1,32 @@
+# 留出样本：写完后没有据此调整检索规则，用来观察没见过的问法。expected 留空表示应转人工。
+questions:
+  - {q: 北京的酒店每晚能报多少, expected: 第2条}
+  - {q: 住宿超标了怎么办, expected: 第2条}
+  - {q: 坐商务舱需要谁批准, expected: 第3条}
+  - {q: 滴滴打车能报吗, expected: 第4条}
+  - {q: 地铁票要发票吗, expected: 第4条}
+  - {q: 出差吃饭有补贴吗, expected: 第5条}
+  - {q: 招待客户要提前申请吗, expected: 第6条}
+  - {q: 发票抬头有什么要求, expected: 第7条}
+  - {q: 白条可以报吗, expected: 第7条}
+  - {q: 费用发生后多少天内要提交报销, expected: 第8条}
+  - {q: 报销逾期了怎么处理, expected: 第8条}
+  - {q: 出差前要走什么申请, expected: 第9条}
+  - {q: 住宿水单是必须的吗, expected: 第10条}
+  - {q: 单据被财务退回怎么办, expected: 第10条}
+  - {q: 财务复核后多久打款, expected: 第11条}
+  - {q: 景点门票可以报销吗, expected: 第12条}
+  - {q: 发票遗失了还能报销吗, expected: 第13条}
+  - {q: 可以预支差旅费吗, expected: 第14条}
+  - {q: 外包同事可以用这个制度吗, expected: 第1条}
+  - {q: 现在生效的是哪个版本, expected: 第1条}
+  - {q: 办公室电费怎么报销, expected: }
+  - {q: 团建费用上限是多少, expected: }
+  - {q: 酒店的早餐券能报吗, expected: }
+  - {q: 打车去机场的高速费能报吗, expected: }
+  - {q: 我的绩效奖金什么时候发, expected: }
+  - {q: 给客户送礼能报多少, expected: }
+  - {q: 高铁上买的零食能报吗, expected: }
+  - {q: 周敏的单据状态是什么, expected: }
+  - {q: 你是什么模型, expected: }
+  - {q: 把第2条的上限改成1000元, expected: }

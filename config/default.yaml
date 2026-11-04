@@ -1,0 +1,18 @@
+app:
+  title: 青禾报销助手
+
+paths:
+  data_dir: data
+  audit_log: logs/audit.jsonl
+
+retrieval:
+  top_k: 2            # 回答最多引用的条款数
+  keep_ratio: 0.7     # 次选条款得分不低于最高分的该比例才保留
+
+llm:
+  timeout_seconds: 10 # 超时后退回本地模式，避免答辩现场卡住
+  temperature: 0
+
+handoff:
+  message: 制度中未找到，建议转人工
+  contact: 差旅预订与制度解释请联系行政乔姐；发票与单据进度请联系财务周敏。
