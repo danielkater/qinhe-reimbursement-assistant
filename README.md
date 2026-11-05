@@ -37,7 +37,7 @@ python scripts/ask.py --mode guard-off    # 关闭防护，观察模型会不会
 python scripts/ask.py --mode guard-on -q "发票丢了怎么办？"
 ```
 
-首次运行会下载约 90 MB 的本地嵌入模型（`BAAI/bge-small-zh-v1.5`），不需要额外的 API Key，之后可以断网使用。测试结果见 [原型测试记录](docs/提示词03-原型测试记录.md)。
+首次运行会下载约 90 MB 的本地嵌入模型（`BAAI/bge-small-zh-v1.5`），不需要额外的 API Key，之后可以断网使用。测试结果见 [原型测试记录](docs/09-提示词03-原型测试记录.md)。
 
 ## 大模型配置（可选）
 
@@ -70,16 +70,16 @@ python scripts/ask.py --mode guard-on -q "发票丢了怎么办？"
 
 ## 运行截图
 
-截图位于 [docs/screenshots/](docs/screenshots/)。
+截图位于 [docs/13-运行截图/](docs/13-运行截图/)。
 
 | 场景 | 截图 |
 | --- | --- |
-| 制度问答（带引用） | ![制度问答](docs/screenshots/01_制度问答_带引用.png) |
-| 找不到依据，转人工 | ![转人工](docs/screenshots/02_制度问答_转人工.png) |
-| 查询本人单据 | ![本人单据](docs/screenshots/03_查单_本人单据.png) |
-| 越权查询被拒绝 | ![越权拒绝](docs/screenshots/04_查单_越权拒绝.png) |
-| 财务查看本组织单据 | ![财务查看](docs/screenshots/05_查单_财务查看.png) |
-| 审计日志 | ![审计日志](docs/screenshots/06_审计日志.png) |
+| 制度问答（带引用） | ![制度问答](docs/13-运行截图/01_制度问答_带引用.png) |
+| 找不到依据，转人工 | ![转人工](docs/13-运行截图/02_制度问答_转人工.png) |
+| 查询本人单据 | ![本人单据](docs/13-运行截图/03_查单_本人单据.png) |
+| 越权查询被拒绝 | ![越权拒绝](docs/13-运行截图/04_查单_越权拒绝.png) |
+| 财务查看本组织单据 | ![财务查看](docs/13-运行截图/05_查单_财务查看.png) |
+| 审计日志 | ![审计日志](docs/13-运行截图/06_审计日志.png) |
 
 ## 测试与评估
 
@@ -111,7 +111,7 @@ config/default.yaml     运行参数
 examples/               评估样本
 scripts/evaluate.py     制度引用准确率评估
 tests/                  pytest 测试
-docs/                   业务挖掘报告、行业分析、流程图、设计方案、报价单、答辩讲稿要点
+docs/                   项目文档，目录见 docs/README.md
 logs/                   运行时生成的审计日志（不提交）
 ```
 
