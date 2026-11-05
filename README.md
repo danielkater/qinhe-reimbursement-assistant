@@ -9,7 +9,7 @@
 
 ## 安装
 
-需要 Python 3.10 及以上版本。以下命令在 Windows PowerShell 中执行：
+需要 Python 3.11 及以上版本。以下命令在 Windows PowerShell 中执行：
 
 ```powershell
 python -m venv .venv
@@ -26,6 +26,18 @@ streamlit run src/qinghe/main.py
 ```
 
 浏览器打开 <http://localhost:8501>。服务只监听本机，因为身份是模拟的。
+
+## 命令行问答原型
+
+按老师提示词 03 实现，使用 Markdown 制度、BM25 + 向量混合检索和可配置的大模型，不涉及 Web。页面目前仍使用关键词检索。
+
+```powershell
+python scripts/ask.py                     # 开启防护（默认），无依据时拒答并转人工
+python scripts/ask.py --mode guard-off    # 关闭防护，观察模型会不会编
+python scripts/ask.py --mode guard-on -q "发票丢了怎么办？"
+```
+
+首次运行会下载约 90 MB 的本地嵌入模型（`BAAI/bge-small-zh-v1.5`），不需要额外的 API Key，之后可以断网使用。测试结果见 [原型测试记录](docs/提示词03-原型测试记录.md)。
 
 ## 大模型配置（可选）
 
@@ -77,7 +89,7 @@ python scripts/evaluate.py
 python scripts/evaluate.py examples/holdout_questions.yaml
 ```
 
-`pytest` 共 5 个测试函数（参数化后 21 个用例），覆盖越权和跨组织拒绝、未知身份、只读、日志最小化、内部资料隔离、状态含义和无依据转人工。大模型部分用桩函数验证校验逻辑，不调用真实模型。
+`pytest` 中，`test_permissions.py` 和 `test_policy_qa.py` 覆盖越权和跨组织拒绝、未知身份、只读、日志最小化、内部资料隔离、状态含义和无依据转人工。`test_prototype.py` 覆盖命令行原型的切片、混合检索、分流和防护。这些测试都用桩函数，不调用真实模型，也不下载模型。
 
 本地模式的评估结果（样本都是作者自拟，规模很小，只能说明 MVP 的行为，不代表真实准确率）：
 

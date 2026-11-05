@@ -9,6 +9,8 @@ from .retriever import retrieve
 ANSWERED, HANDOFF = "answered", "handoff"
 CITATION = re.compile(r"第\d+条")
 NUMBER = re.compile(r"\d+(?:\.\d+)?")
+# 行首的列表序号，例如“1. ”“2、”。它们不是回答里的金额或天数，校验数字时要跳过
+LIST_ORDINAL = re.compile(r"^\s*\d{1,2}[.．、)）]\s*", re.M)
 
 SYSTEM_PROMPT = """你是青禾公司报销制度问答助手。
 规则：
@@ -38,7 +40,7 @@ def check_llm_answer(text: str, clauses: list[Clause]) -> tuple[Clause, ...] | N
         return None
     cited = tuple(by_id[cid] for cid in cited_ids)
     allowed = set(NUMBER.findall("".join(c.text for c in cited)))
-    numbers = NUMBER.findall(CITATION.sub("", text))
+    numbers = NUMBER.findall(LIST_ORDINAL.sub("", CITATION.sub("", text)))
     if any(n not in allowed for n in numbers):
         return None
     return cited

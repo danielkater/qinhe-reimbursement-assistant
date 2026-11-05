@@ -25,6 +25,22 @@ def load_config(path: Path | None = None) -> dict:
         return yaml.safe_load(f)
 
 
+def load_embedding_settings(config: dict, env_file: Path | None = None) -> "EmbeddingSettings":
+    """读取嵌入模型配置。供应商和模型在 YAML 里，在线接口的密钥只放 .env。"""
+    from qinghe.core.embeddings import EmbeddingSettings
+
+    load_dotenv(env_file or ROOT / ".env")
+    embedding = config["embedding"]
+    return EmbeddingSettings(
+        provider=embedding["provider"],
+        model=embedding["model"],
+        cache_dir=ROOT / embedding["cache_dir"],
+        query_prefix=embedding.get("query_prefix", ""),
+        api_key=os.getenv("EMBEDDING_API_KEY", "").strip(),
+        base_url=os.getenv("EMBEDDING_BASE_URL", "").strip(),
+    )
+
+
 def load_llm_settings(env_file: Path | None = None) -> LLMSettings:
     load_dotenv(env_file or ROOT / ".env")
     return LLMSettings(

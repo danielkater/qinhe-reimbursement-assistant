@@ -4,10 +4,23 @@ app:
 paths:
   data_dir: data
   audit_log: logs/audit.jsonl
+  policy_markdown: data/policies/policy_v3.md
 
 retrieval:
   top_k: 2            # 回答最多引用的条款数
   keep_ratio: 0.7     # 次选条款得分不低于最高分的该比例才保留
+  hybrid:             # 命令行原型使用的混合检索；Streamlit 页面仍用上面的关键词检索
+    chunk_max_chars: 500
+    top_k: 3
+    rrf_k: 60
+    min_similarity: 0.59       # 依据门槛：最高相似度低于它就拒答，用 examples/eval_questions.yaml 校准
+    strict_unknown_terms: false # true 时，问题里有制度外词语就拒答
+
+embedding:
+  provider: fastembed          # fastembed（本地）、openai_compatible（在线接口）、none（只用 BM25）
+  model: BAAI/bge-small-zh-v1.5
+  cache_dir: storage/models    # 本地模型存放位置，不提交到仓库
+  query_prefix: ""
 
 llm:
   timeout_seconds: 10 # 超时后退回本地模式，避免答辩现场卡住
